@@ -1,4 +1,5 @@
 import {Colors} from '../const.js';
+import {getRandomIntegerNumber} from '../utils.js';
 
 const DescriptionItems = [
   `Изучить теорию`,
@@ -24,9 +25,7 @@ const Tags = [
   `keks`
 ];
 
-const getRandomIntegerNumber = (min, max) => min + Math.floor((max + 1) * Math.random());
-
-const getRandomArrayItem = (array) => array[getRandomIntegerNumber(0, array.length)];
+const getRandomArrayItem = (array) => array[getRandomIntegerNumber(0, array.length - 1)];
 
 const getRandomDate = () => {
   const targetDate = new Date();
