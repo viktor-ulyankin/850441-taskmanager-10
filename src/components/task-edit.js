@@ -1,5 +1,6 @@
-import {Colors, Days, MonthNames} from '../const.js';
-import {formatTime, createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
+import {COLORS, DAYS, MONTH_NAMES} from '../const.js';
+import {formatTime} from '../utils/common.js';
 
 const getColorsTemplate = (colors, currentColor) => {
   return colors
@@ -76,7 +77,7 @@ const getTaskEditTemplate = (task) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
@@ -84,8 +85,8 @@ const getTaskEditTemplate = (task) => {
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   const tagsMarkup = getHashtagsTemplate(tags);
-  const colorsMarkup = getColorsTemplate(Colors, color);
-  const repeatingDaysMarkup = getRepeatingDaysTemplate(Days, repeatingDays);
+  const colorsMarkup = getColorsTemplate(COLORS, color);
+  const repeatingDaysMarkup = getRepeatingDaysTemplate(DAYS, repeatingDays);
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -179,25 +180,19 @@ const getTaskEditTemplate = (task) => {
   );
 };
 
-export default class TaskEdit {
+export default class TaskEdit extends AbstractComponent {
   constructor(task) {
+    super();
+
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return getTaskEditTemplate(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+    .addEventListener(`submit`, handler);
   }
 }

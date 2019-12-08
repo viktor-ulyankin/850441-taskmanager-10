@@ -1,5 +1,6 @@
-import {MonthNames} from '../const.js';
-import {formatTime, createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
+import {MONTH_NAMES} from '../const.js';
+import {formatTime} from '../utils/common.js';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -21,7 +22,7 @@ const getTaskTemplate = (task) => {
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
@@ -82,26 +83,19 @@ const getTaskTemplate = (task) => {
   );
 };
 
-export default class Task {
+export default class Task extends AbstractComponent {
   constructor(task) {
-    this._task = task;
+    super();
 
-    this._element = null;
+    this._task = task;
   }
 
   getTemplate() {
     return getTaskTemplate(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`)
+    .addEventListener(`click`, handler);
   }
 }
