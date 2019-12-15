@@ -22,7 +22,7 @@ const Tags = [
   `theory`,
   `practice`,
   `intensive`,
-  `keks`
+  `keks`,
 ];
 
 const getRandomArrayItem = (array) => array[getRandomIntegerNumber(0, array.length - 1)];
